@@ -1,0 +1,68 @@
+services:
+  # backend:
+  #   build: ./leave-mgmt
+  #   ports:
+  #     - "8080:8080"
+  #   environment:
+  #     - SPRING_PROFILES_ACTIVE=dev
+  #   env_file:
+  #     - ./leave-mgmt/.env
+  #   depends_on:
+  #     - mysql
+  # frontend:
+  #   build: ./frontend
+  #   ports:
+  #     - "3000:3000"
+  #   environment:
+  #     - REACT_APP_API_BASE_URL=http://localhost:8080
+  #     - REACT_APP_AZURE_CLIENT_ID=${AZURE_CLIENT_ID}
+  #   depends_on:
+  #     - backend
+  # postgres:
+  #   image: postgres:15-alpine
+  #   container_name: leave-management-db
+  #   ports:
+  #     - "5432:5432"
+  #   environment:
+  #     - POSTGRES_DB=${DB_NAME}
+  #     - POSTGRES_USER=${DB_USERNAME}
+  #     - POSTGRES_PASSWORD=${DB_PASSWORD}
+    # volumes:
+    #   - postgres_data:/var/lib/postgresql/data
+#  mysql:
+#    image: mysql:8.0
+#    container_name: mysql-db
+#    restart: always
+#    environment:
+#      MYSQL_DATABASE: ${DB_NAME}
+#      MYSQL_USER: ${DB_USERNAME}
+#      MYSQL_PASSWORD: ${DB_PASSWORD}
+#      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+#    ports:
+#      - "3306:3306"
+#    volumes:
+#      - mysql_data:/var/lib/mysql
+
+  adminer:
+    image: adminer
+    container_name: adminer
+    restart: always
+    ports:
+      - "8081:8080"
+
+  # flyway:
+  #   image: flyway/flyway:11.8.1
+  #   container_name: flyway-migrator
+  #   depends_on:
+  #     - postgres
+  #   volumes:
+  #     - ./db:/flyway/sql
+  #   environment:
+  #     - FLYWAY_URL=jdbc:postgresql://postgres:5432/${DB_NAME}
+  #     - FLYWAY_USER=${DB_USERNAME}
+  #     - FLYWAY_PASSWORD=${DB_PASSWORD}  
+  #   command: -connectRetries=10 migrate    
+
+volumes:
+  mysql_data: 
+#   postgres_data: 

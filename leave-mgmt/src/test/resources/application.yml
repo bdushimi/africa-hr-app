@@ -1,0 +1,61 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password: 
+    driver-class-name: org.h2.Driver
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema.sql
+      data-locations: classpath:data.sql
+      continue-on-error: true
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.H2Dialect
+    defer-datasource-initialization: true
+
+  security:
+    oauth2:
+      client:
+        registration:
+          azure:
+            client-id: test-client-id
+            client-secret: test-client-secret
+            scope: openid, profile, email
+        provider:
+          azure:
+            issuer-uri: https://login.microsoftonline.com/test-tenant-id/v2.0
+            user-name-attribute: name
+
+server:
+  port: 8082
+  servlet:
+    context-path: /api
+
+logging:
+  level:
+    root: INFO
+    com.africa.hr: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.web: DEBUG
+    org.springframework.boot.autoconfigure: DEBUG
+    org.springframework.context: DEBUG
+    org.springframework.security.authentication: TRACE
+    org.springframework.security.web: TRACE
+    com.africa.hr.config.DataInitializationConfig: DEBUG
+    org.springframework.security.web.authentication: TRACE
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    com.zaxxer.hikari: DEBUG
+    org.springframework.jdbc.datasource.init: DEBUG
+    org.springframework.boot.autoconfigure.jdbc: DEBUG
+
+jwt:
+  secret: test-secret-key-that-is-at-least-32-characters-long
+  expiration: 86400000 # 24 hours in milliseconds 

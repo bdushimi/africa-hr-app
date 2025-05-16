@@ -1,0 +1,106 @@
+spring:
+  config:
+    use-legacy-processing: false
+  datasource:
+    url: jdbc:mysql://localhost:${DB_PORT}/${DB_NAME}?allowPublicKeyRetrieval=true&useSSL=false
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema.sql
+      data-locations: classpath:data.sql
+      continue-on-error: true
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
+    defer-datasource-initialization: true
+
+  security:
+    oauth2:
+      client:
+        registration:
+          azure:
+            client-id: ${AZURE_CLIENT_ID}
+            client-secret: ${AZURE_CLIENT_SECRET}
+            scope: openid, profile, email
+        provider:
+          azure:
+            issuer-uri: https://login.microsoftonline.com/${AZURE_TENANT_ID}/v2.0
+            user-name-attribute: name
+    cors:
+      allowed-origins: http://localhost:8080
+      allowed-methods: GET,POST,PUT,DELETE,OPTIONS
+      allowed-headers: Authorization,Content-Type,X-Requested-With       
+
+server:
+  port: ${SERVER_PORT:8082}
+  servlet:
+    context-path: /api
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          ssl:
+            trust: smtp.gmail.com
+    default-encoding: UTF-8        
+
+logging:
+  level:
+    root: ${LOG_LEVEL:INFO}
+    com.africa.hr: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.web: DEBUG
+    org.springframework.boot.autoconfigure: DEBUG
+    org.springframework.context: DEBUG
+    org.springframework.security.authentication: TRACE
+    org.springframework.security.web: TRACE
+    com.africa.hr.config.DataInitializationConfig: DEBUG
+    org.springframework.security.web.authentication: TRACE
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    com.zaxxer.hikari: DEBUG
+    org.springframework.jdbc.datasource.init: DEBUG
+    org.springframework.boot.autoconfigure.jdbc: DEBUG
+  file:
+    name: logs/application.log
+    max-size: 10MB
+    max-history: 7
+    total-size-cap: 100MB
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+jwt:
+  secret: ${JWT_SECRET}
+  expiration: ${JWT_EXPIRATION:86400000} # 24 hours in milliseconds
+
+# AWS S3 Configuration
+aws:
+  s3:
+    access-key: ${AWS_ACCESS_KEY}
+    secret-key: ${AWS_SECRET_KEY}
+    region: ${AWS_REGION:us-east-1}
+    bucket-name: ${AWS_S3_BUCKET}
+
+azure:
+  storage:
+    connection-string: ${AZURE_BLOB_CONNECTION_STRING}
+    container-name: ${AZURE_CONTAINER_NAME}
